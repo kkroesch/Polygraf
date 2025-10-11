@@ -1,0 +1,16 @@
+baseURL: "https://example.com/"
+languageCode: "de"
+title: "µMezura-8 Dokumentation"
+theme: ""
+
+markup:
+  goldmark:
+    parser:
+      attribute:
+        block: true # ermöglicht {.epigraph} u. ä.
+    renderer:
+      unsafe: true # erlaubt Inline-HTML wie <figure>
+  highlight:
+    style: borland
+    lineNos: true
+    noClasses: false # nutzt chroma.css für Styling
