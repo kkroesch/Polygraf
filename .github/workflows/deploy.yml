@@ -2,7 +2,7 @@ name: Build & Deploy (Hugo → GitHub Pages)
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -42,10 +42,10 @@ jobs:
 
       - name: Build site
         run: |
-          if [ -n "${{ env.BASEURL }}" ]; then \
-            hugo -s doc --minify --baseURL "${{ env.BASEURL }}"; \
-          else \
-            hugo -s doc --minify; \
+          if [ -n "${{ env.BASEURL }}" ]; then
+            hugo -s doc --minify --baseURL "${{ env.BASEURL }}"
+          else
+            hugo -s doc --minify
           fi
 
       - name: Upload Pages artifact
