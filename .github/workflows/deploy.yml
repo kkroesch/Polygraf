@@ -2,7 +2,7 @@ name: Build & Deploy (Hugo → GitHub Pages)
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -17,28 +17,13 @@ concurrency:
 env:
   HUGO_VERSION: 0.134.2
   HUGO_ENV: production
-  BASEURL: "" # z.B. https://<user>.github.io/<repo>/ wenn nötig
-
-defaults:
-  run:
-    shell: bash
-    working-directory: .
+  BASEURL: ""  # z.B. https://<user>.github.io/<repo>/ falls nötig
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Ensure config exists (hugo.yaml → config.yaml fallback)
-        run: |
-          if [ ! -f config.yaml ]; then
-            if [ -f hugo.yaml ]; then
-              cp hugo.yaml config.yaml
-            fi
-          fi
-          ls -la
+      - uses: actions/checkout@v4
 
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
@@ -54,7 +39,7 @@ jobs:
       - name: Build site
         run: |
           if [ -n "${{ env.BASEURL }}" ]; then
-            hugo --minify --baseURL --themesDir "" "${{ env.BASEURL }}"
+            hugo --minify --baseURL "${{ env.BASEURL }}" --themesDir ""
           else
             hugo --minify --themesDir ""
           fi
@@ -62,8 +47,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Pfad ist relativ zum Repo-Root, nicht zum working-directory
-          path: public
+          path: public   # <- Root, nicht doc/public
 
   deploy:
     environment:
