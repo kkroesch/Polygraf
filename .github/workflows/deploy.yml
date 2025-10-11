@@ -22,7 +22,7 @@ env:
 defaults:
   run:
     shell: bash
-    working-directory: doc
+    working-directory: .
 
 jobs:
   build:
@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Pfad ist relativ zum Repo-Root, nicht zum working-directory
-          path: doc/public
+          path: public
 
   deploy:
     environment:
