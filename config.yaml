@@ -1,7 +1,6 @@
 baseURL: "https://example.com/"
 languageCode: "de"
 title: "µMezura-8 Dokumentation"
-theme: ""
 
 markup:
   goldmark:
