@@ -17,9 +17,12 @@ concurrency:
 env:
   HUGO_VERSION: 0.134.2
   HUGO_ENV: production
-  # Falls Dein Repo kein User/Org-Root ist, setze BASEURL z.B. auf:
-  # https://<owner>.github.io/<repo>/
-  BASEURL: ""
+  BASEURL: "" # z.B. https://<user>.github.io/<repo>/ wenn nötig
+
+defaults:
+  run:
+    shell: bash
+    working-directory: doc
 
 jobs:
   build:
@@ -28,29 +31,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Ensure config exists (hugo.yaml → config.yaml fallback)
+        run: |
+          if [ ! -f config.yaml ]; then
+            if [ -f hugo.yaml ]; then
+              cp hugo.yaml config.yaml
+            fi
+          fi
+          ls -la
+
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: ${{ env.HUGO_VERSION }}
-          # extended: true  # nur falls SCSS/PostCSS nötig
 
       - name: Generate Chroma styles (borland + gruvbox)
         run: |
-          mkdir -p doc/static/css
-          hugo gen chromastyles --style=borland > doc/static/css/chroma.css
-          hugo gen chromastyles --style=gruvbox > doc/static/css/chroma-dark.css
+          mkdir -p static/css
+          hugo gen chromastyles --style=borland > static/css/chroma.css
+          hugo gen chromastyles --style=gruvbox > static/css/chroma-dark.css
 
       - name: Build site
         run: |
           if [ -n "${{ env.BASEURL }}" ]; then
-            hugo -s doc --minify --baseURL "${{ env.BASEURL }}"
+            hugo --minify --baseURL "${{ env.BASEURL }}"
           else
-            hugo -s doc --minify
+            hugo --minify
           fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Pfad ist relativ zum Repo-Root, nicht zum working-directory
           path: doc/public
 
   deploy:
