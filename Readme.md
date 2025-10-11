@@ -1,6 +1,14 @@
+[![Build & Deploy](https://github.com/kkroesch/Polygraf/actions/workflows/deploy.yml/badge.svg)](https://github.com/kkroesch/Polygraf/actions/workflows/deploy.yml)
+[![Build PDF](https://github.com/kkroesch/Polygraf/actions/workflows/pdf.yml/badge.svg)](https://github.com/kkroesch/Polygraf/actions/workflows/pdf.yml)
+
+
 # Polygraf Documentation Template
 
 Polygraf is a clean typographic CSS system for technical documentation and scientific writing. It provides well-balanced layouts for screen, dark mode, and print. This repository integrates Polygraf with [Hugo](https://gohugo.io/) for static site generation.
+
+
+📄 **Live demo:** [kkroesch.github.io/Polygraf](https://kkroesch.github.io/Polygraf/)
+📘 **Download PDF:** [Latest demo.pdf (artifact)](https://github.com/kkroesch/Polygraf/actions/workflows/pdf.yml)
 
 ---
 

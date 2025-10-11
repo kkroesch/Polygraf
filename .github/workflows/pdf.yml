@@ -1,0 +1,61 @@
+name: Build PDF
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+env:
+  HUGO_VERSION: 0.134.2
+  HUGO_ENV: production
+  # Für GitHub Pages unter /<repo>/:
+  BASEURL: "https://kkroesch.github.io/Polygraf/"
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: ${{ env.HUGO_VERSION }}
+
+      - name: Generate Chroma styles (borland + gruvbox)
+        run: |
+          mkdir -p static/css
+          hugo gen chromastyles --style=borland > static/css/chroma.css
+          hugo gen chromastyles --style=gruvbox > static/css/chroma-dark.css
+
+      - name: Build site
+        run: |
+          hugo --minify --baseURL "${{ env.BASEURL }}" --themesDir ""
+
+      - name: Install wkhtmltopdf
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wkhtmltopdf
+
+      - name: Render demo.pdf
+        run: |
+          wkhtmltopdf --enable-local-file-access public/index.html demo.pdf
+
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-pdf
+          path: demo.pdf
+
+      # Optional: an Release anhängen, wenn per Tag ausgelöst
+      - name: Attach PDF to Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: demo.pdf
