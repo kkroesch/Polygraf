@@ -1,0 +1,65 @@
+<aside class="meta-box" aria-label="Dokument-Metadaten">
+  <div class="meta-row">
+    <span class="meta-key">Autor</span>
+    <span class="meta-val">
+      {{ with .Params.author }}{{ . }}{{ else }}{{ .Site.Author.name | default "—" }}{{ end }}
+      {{ with .Params.email }} · <a href="mailto:{{ . }}">{{ . }}</a>{{ end }}
+    </span>
+  </div>
+
+  <div class="meta-row">
+    <span class="meta-key">Datum</span>
+    <span class="meta-val">
+      {{- if .Date -}}{{ .Date.Format "02. January 2006" }}{{ end -}}
+      {{- with .Lastmod }}{{ if ne . $.Date }} · aktualisiert: {{ .Format "02. January 2006" }}{{ end }}{{ end -}}
+    </span>
+  </div>
+
+  {{ with .Params.version }}
+  <div class="meta-row">
+    <span class="meta-key">Version</span>
+    <span class="meta-val">{{ . }}</span>
+  </div>
+  {{ end }}
+
+  {{ with .Params.status }}
+  <div class="meta-row">
+    <span class="meta-key">Status</span>
+    <span class="meta-val">{{ . }}</span>
+  </div>
+  {{ end }}
+
+  <div class="meta-row">
+    <span class="meta-key">Lesedauer</span>
+    <span class="meta-val">{{ .ReadingTime }} min · ~{{ .WordCount }} Wörter</span>
+  </div>
+
+  {{ with .Params.tags }}
+  <div class="meta-row">
+    <span class="meta-key">Tags</span>
+    <span class="meta-val">
+      {{ range $i, $t := . -}}
+        {{- if $i }}, {{ end -}}<a href="{{ (relURL (printf "/tags/%s/" ($t | urlize))) }}">{{ $t }}</a>
+      {{- end }}
+    </span>
+  </div>
+  {{ end }}
+
+  {{ with .Params.categories }}
+  <div class="meta-row">
+    <span class="meta-key">Kategorie</span>
+    <span class="meta-val">
+      {{ range $i, $c := . -}}
+        {{- if $i }}, {{ end -}}<a href="{{ (relURL (printf "/categories/%s/" ($c | urlize))) }}">{{ $c }}</a>
+      {{- end }}
+    </span>
+  </div>
+  {{ end }}
+
+  {{ with .Params.repo }}
+  <div class="meta-row">
+    <span class="meta-key">Repo</span>
+    <span class="meta-val"><a href="{{ . }}">{{ . }}</a></span>
+  </div>
+  {{ end }}
+</aside>
